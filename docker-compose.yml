@@ -21,13 +21,13 @@ services:
             - .env
         environment:
             - TIKTOKEN_CACHE_DIR=/app/data/tiktoken
-        restart: unless-stopped
         extra_hosts:
             - "host.docker.internal:host-gateway"
         depends_on:
             - lightrag-neo4j
             - lightrag-pgvector
             - lightrag-redis
+        restart: unless-stopped
     lightrag-neo4j:
         image: neo4j:enterprise
         volumes:
@@ -41,7 +41,7 @@ services:
         ports:
             - "7475:7474"
             - "7688:7687"
-        restart: always
+        restart: unless-stopped
     lightrag-pgvector:
         image: pgvector/pgvector:pg16
         environment:
@@ -52,6 +52,7 @@ services:
             - "5436:5432"
         volumes:
             - pgvector-data:/var/lib/postgresql/data
+        restart: unless-stopped
     lightrag-redis:
         image: redis:6
         ports:
@@ -61,3 +62,4 @@ services:
             interval: 5s
             timeout: 1s
             retries: 5
+        restart: unless-stopped
